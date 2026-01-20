@@ -11,4 +11,9 @@ contract AccessControlVulnerable {
     function setOwner(address newOwner) public {
         owner = newOwner;
     }
+
+    function sensitiveAction() public view returns (string memory) {
+        require(msg.sender == owner, "not owner");
+        return "secret action executed";
+    }
 }

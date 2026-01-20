@@ -1,0 +1,19 @@
+Uninitialized Proxy Vulnerability
+
+Description
+When using upgradeable contracts, constructors do not run in the proxy
+context. If the `initialize()` function is left public and unprotected,
+any user can call it before the intended admin, gaining ownership.
+
+Proof of Concept
+1. Deploy the proxy pointing to `LogicV1` without calling `initialize()`.
+2. From an attacker account, call `initialize(attackerAddress)`.
+3. Observe that `owner` is set to the attacker.
+4. The attacker can now call privileged functions.
+
+Impact
+Complete administrative takeover of the proxy contract.
+
+Recommendation
+Use an `initializer` modifier to ensure `initialize()` can only be called once,
+and disable initializers in the implementation constructor.
